@@ -1,0 +1,2935 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Tehnologii Web: CSS & UI Design (Curs 3, 5, 6, 7)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+  <style>
+    /* ============================================================
+       CSS DESIGN SYSTEM (Conform Principiilor Cursului: 60-30-10,
+       Contrast WCAG, Fitts's Law, Typography Scale & Gestalt)
+       ============================================================ */
+    :root {
+      /* 60% Dominant Base Colors (Dark Mode default) */
+      --bg-base: #0f172a;
+      --bg-surface: #1e293b;
+      --bg-surface-elevated: #334155;
+      --bg-surface-hover: #2d3748;
+
+      /* 30% Structural & Secondary Colors */
+      --border-subtle: #334155;
+      --border-medium: #475569;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* 10% Accent Colors (Focal points & Feedback) */
+      --accent-primary: #6366f1;
+      --accent-primary-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      
+      --color-success: #10b981;
+      --color-success-bg: rgba(16, 185, 129, 0.15);
+      --color-success-border: #059669;
+
+      --color-danger: #ef4444;
+      --color-danger-bg: rgba(239, 68, 68, 0.15);
+      --color-danger-border: #dc2626;
+
+      --color-warning: #f59e0b;
+      --color-info: #0ea5e9;
+
+      /* Typography & Shadows */
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+      --shadow-accent: 0 0 20px rgba(99, 102, 241, 0.35);
+
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s ease;
+      --transition-slow: 0.4s ease;
+    }
+
+    /* Light Mode Variables */
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f1f5f9;
+      --bg-surface-hover: #e2e8f0;
+
+      --border-subtle: #e2e8f0;
+      --border-medium: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+
+      --accent-primary: #4f46e5;
+      --accent-primary-hover: #4338ca;
+      --accent-glow: rgba(79, 70, 229, 0.15);
+
+      --color-success: #059669;
+      --color-success-bg: rgba(5, 150, 105, 0.1);
+      --color-success-border: #10b981;
+
+      --color-danger: #dc2626;
+      --color-danger-bg: rgba(220, 38, 38, 0.1);
+      --color-danger-border: #ef4444;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+      --shadow-accent: 0 0 20px rgba(79, 70, 229, 0.2);
+    }
+
+    /* ============================================================
+       RESET & BASE STYLES
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+      transition: background-color var(--transition-normal), color var(--transition-normal);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Selection Highlight (Conform Curs 5) */
+    ::selection {
+      background: var(--accent-primary);
+      color: #ffffff;
+    }
+
+    /* ============================================================
+       CONTAINER & LAYOUT
+       ============================================================ */
+    .app-container {
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Nav */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 2rem;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--accent-primary), #ec4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.3rem;
+      box-shadow: var(--shadow-accent);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-text span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-icon {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      outline: none;
+    }
+
+    .btn-icon:hover {
+      background: var(--bg-surface-hover);
+      color: var(--text-primary);
+      border-color: var(--border-medium);
+      transform: translateY(-1px);
+    }
+
+    .btn-icon:active {
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       BADGES & PILLS
+       ============================================================ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .badge-course {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    [data-theme="light"] .badge-course {
+      background: #ede9fe;
+      color: #6366f1;
+    }
+
+    .badge-diff-easy {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .badge-diff-medium {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .badge-diff-hard {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .badge-cat {
+      background: var(--bg-surface-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ============================================================
+       BUTTONS (Legea lui Fitts - target mare, clar, accesibil)
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+      min-height: 48px;
+      user-select: none;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+      color: white;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      border-color: var(--border-medium);
+      color: var(--text-primary);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--accent-primary);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-medium);
+      color: var(--text-secondary);
+    }
+    .btn-outline:hover {
+      color: var(--text-primary);
+      border-color: var(--text-primary);
+    }
+
+    .btn-danger {
+      background: var(--color-danger-bg);
+      border-color: var(--color-danger-border);
+      color: var(--color-danger);
+    }
+    .btn-danger:hover {
+      background: var(--color-danger);
+      color: white;
+    }
+
+    /* ============================================================
+       HOME / START SCREEN
+       ============================================================ */
+    .screen {
+      display: none;
+      flex-direction: column;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+    }
+
+    .hero-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      max-width: 720px;
+    }
+
+    .course-coverage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .course-mini-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .course-mini-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-primary);
+    }
+
+    .course-mini-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Configuration Panel */
+    .config-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .config-section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Select Pill Grid */
+    .pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .choice-pill {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 0.6rem 1.1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .choice-pill:hover {
+      background: var(--bg-surface-hover);
+      color: var(--text-primary);
+      border-color: var(--border-medium);
+    }
+
+    .choice-pill.selected {
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: white;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+    }
+
+    /* Mode Radio Cards */
+    .mode-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .mode-card {
+      background: var(--bg-surface-elevated);
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .mode-card:hover {
+      border-color: var(--border-medium);
+      transform: translateY(-2px);
+    }
+
+    .mode-card.selected {
+      border-color: var(--accent-primary);
+      background: rgba(99, 102, 241, 0.08);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+    }
+
+    .mode-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .mode-card-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .mode-card-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .start-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+      align-items: center;
+    }
+
+    /* ============================================================
+       QUIZ SCREEN
+       ============================================================ */
+    .quiz-top-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .quiz-meta-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .quiz-timer-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.9rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 0.35rem 0.8rem;
+      border-radius: var(--radius-full);
+      color: var(--accent-primary);
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-surface);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), #a855f7);
+      width: 0%;
+      transition: width var(--transition-normal);
+      border-radius: var(--radius-full);
+    }
+
+    /* Question Card */
+    .question-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 2rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .question-prompt {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--text-primary);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Code Snippet Block */
+    .code-block {
+      background: #090d16;
+      color: #e2e8f0;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      padding: 1.1rem 1.25rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      border: 1px solid #1e293b;
+      overflow-x: auto;
+      line-height: 1.5;
+      white-space: pre;
+    }
+
+    [data-theme="light"] .code-block {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+
+    /* Options List (Fitts's Law) */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .option-item {
+      background: var(--bg-surface-elevated);
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: all var(--transition-fast);
+      position: relative;
+      user-select: none;
+      min-height: 54px;
+    }
+
+    .option-item:hover:not(.disabled) {
+      background: var(--bg-surface-hover);
+      border-color: var(--accent-primary);
+      transform: translateX(4px);
+    }
+
+    .option-item.selected {
+      border-color: var(--accent-primary);
+      background: rgba(99, 102, 241, 0.12);
+    }
+
+    .option-item.correct {
+      border-color: var(--color-success-border) !important;
+      background: var(--color-success-bg) !important;
+      color: var(--text-primary);
+    }
+
+    .option-item.incorrect {
+      border-color: var(--color-danger-border) !important;
+      background: var(--color-danger-bg) !important;
+      color: var(--text-primary);
+    }
+
+    .option-letter {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      transition: all var(--transition-fast);
+    }
+
+    .option-item:hover .option-letter {
+      color: var(--text-primary);
+      border-color: var(--border-medium);
+    }
+
+    .option-item.selected .option-letter {
+      background: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+    }
+
+    .option-item.correct .option-letter {
+      background: var(--color-success);
+      color: white;
+      border-color: var(--color-success);
+    }
+
+    .option-item.incorrect .option-letter {
+      background: var(--color-danger);
+      color: white;
+      border-color: var(--color-danger);
+    }
+
+    .option-text {
+      flex: 1;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      padding-top: 3px;
+    }
+
+    .option-status-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      display: none;
+    }
+    .option-item.correct .option-status-icon,
+    .option-item.incorrect .option-status-icon {
+      display: block;
+    }
+
+    /* Explanation Banner (Slide-in) */
+    .explanation-card {
+      display: none;
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin-top: 1rem;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .explanation-header {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--accent-primary);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .explanation-text {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Quiz Bottom Navigation */
+    .quiz-bottom-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================================
+       RESULTS / SUMMARY SCREEN
+       ============================================================ */
+    .results-hero {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .score-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--bg-surface-elevated), var(--bg-surface));
+      border: 4px solid var(--accent-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-accent);
+    }
+
+    .score-val {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text-primary);
+    }
+
+    .score-total {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .grade-badge {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.35rem 1.2rem;
+      border-radius: var(--radius-full);
+      margin-bottom: 0.75rem;
+    }
+
+    .feedback-message {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      max-width: 550px;
+      margin-bottom: 1.5rem;
+    }
+
+    .results-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .res-stat-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .res-stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .res-stat-val {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Breakdown Section */
+    .breakdown-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .breakdown-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breakdown-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .breakdown-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .breakdown-bar-bg {
+      height: 8px;
+      background: var(--bg-surface-elevated);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .breakdown-bar-fill {
+      height: 100%;
+      background: var(--accent-primary);
+      border-radius: var(--radius-full);
+      transition: width 0.8s ease;
+    }
+
+    /* Review Questions Section */
+    .review-filter-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .review-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .review-item.is-correct {
+      border-left: 4px solid var(--color-success);
+    }
+
+    .review-item.is-wrong {
+      border-left: 4px solid var(--color-danger);
+    }
+
+    /* ============================================================
+       FLASHCARDS / STUDY BROWSER SCREEN
+       ============================================================ */
+    .study-search-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 250px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .card-accordion {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: border-color var(--transition-fast);
+    }
+
+    .accordion-header {
+      padding: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      user-select: none;
+    }
+
+    .accordion-header:hover {
+      background: var(--bg-surface-elevated);
+    }
+
+    .accordion-title {
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .accordion-body {
+      padding: 0 1.25rem 1.25rem;
+      display: none;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 1rem;
+    }
+
+    .card-accordion.open .accordion-body {
+      display: block;
+    }
+
+    /* Footer */
+    .app-footer {
+      margin-top: auto;
+      padding-top: 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* Modal dialog */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 1rem 0.75rem 2rem;
+      }
+      .hero-card {
+        padding: 1.5rem 1.25rem;
+      }
+      .hero-title {
+        font-size: 1.4rem;
+      }
+      .question-card {
+        padding: 1.5rem 1.25rem;
+      }
+      .question-prompt {
+        font-size: 1.1rem;
+      }
+      .option-item {
+        padding: 0.85rem 1rem;
+      }
+      .start-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      .start-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="brand" onclick="app.showScreen('home')">
+        <div class="brand-icon">CSS</div>
+        <div class="brand-text">
+          <h1>Quiz Tehnologii Web</h1>
+          <span>Curs 3, Curs 5, Curs 6, Curs 7</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-icon" id="soundBtn" onclick="app.toggleSound()" title="Sunet activat/dezactivat">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+        <button class="btn-icon" id="themeBtn" onclick="app.toggleTheme()" title="Comută Temă (Dark/Light)">
+          <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         SCREEN 1: HOME / CONFIGURATION
+         ============================================================ -->
+    <main id="screen-home" class="screen active">
+      <div class="hero-card">
+        <h2 class="hero-title">Evaluare & Exersare CSS & UI Design</h2>
+        <p class="hero-subtitle">
+          Aplicație interactivă de teste grilă generată pe baza cursurilor de Tehnologii Web (TW). Include întrebări autentice din slide-uri, calcul de specificitate, moștenire, Flexbox, Grid, Animații și principii Gestalt/UI.
+        </p>
+
+        <div class="course-coverage-grid">
+          <div class="course-mini-card">
+            <div class="course-mini-title">📘 Curs 3</div>
+            <div class="course-mini-desc">Baze CSS, Includere (link, style, inline), Selectori, Combinatori, currentColor, Pseudo-clase.</div>
+          </div>
+          <div class="course-mini-card">
+            <div class="course-mini-title">⚡ Curs 5</div>
+            <div class="course-mini-desc">Algoritmul Cascade, Moștenire, Specificitate (:where/:is), Box Model, Poziționare, Responsive & Float.</div>
+          </div>
+          <div class="course-mini-card">
+            <div class="course-mini-title">📐 Curs 6</div>
+            <div class="course-mini-desc">Flexbox avansat, Grid bidimensional, Culori & WCAG, Gradients, Tipografie, Animații & Micro-interacțiuni.</div>
+          </div>
+          <div class="course-mini-card">
+            <div class="course-mini-title">🎨 Curs 7</div>
+            <div class="course-mini-desc">Graphic Design, Gestalt, Principiile CRAP, Legea lui Fitts, Regula 60-30-10, Landing Page & Conversie.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-card">
+        <!-- Mod de Testare -->
+        <div>
+          <div class="config-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            Selectează Modul de Testare
+          </div>
+          <div class="mode-cards-grid">
+            <div class="mode-card selected" onclick="app.setMode('practice', this)">
+              <div class="mode-card-header">
+                <span class="mode-card-title">💡 Mod Învățare</span>
+                <span class="badge badge-course">Recomandat</span>
+              </div>
+              <p class="mode-card-desc">Primești feedback instant după fiecare răspuns, cu explicația completă a regulii și slide-ului din curs.</p>
+            </div>
+            <div class="mode-card" onclick="app.setMode('exam', this)">
+              <div class="mode-card-header">
+                <span class="mode-card-title">⏱️ Mod Examen</span>
+                <span class="badge badge-diff-hard">Cronometrat</span>
+              </div>
+              <p class="mode-card-desc">Simulare reală de examen. Răspunsurile corecte sunt ascunse până la final, când primești nota oficială (1 - 10).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtrare Curs -->
+        <div>
+          <div class="config-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            Filtrează după Curs
+          </div>
+          <div class="pill-grid" id="coursePills">
+            <div class="choice-pill selected" onclick="app.setFilter('course', 'ALL', this)">Toate Cursurile (<span id="count-all">52</span>)</div>
+            <div class="choice-pill" onclick="app.setFilter('course', 'Curs 3', this)">Curs 3 (Baze & Selectori)</div>
+            <div class="choice-pill" onclick="app.setFilter('course', 'Curs 5', this)">Curs 5 (Cascadă & Box Model)</div>
+            <div class="choice-pill" onclick="app.setFilter('course', 'Curs 6', this)">Curs 6 (Flex, Grid, Animații)</div>
+            <div class="choice-pill" onclick="app.setFilter('course', 'Curs 7', this)">Curs 7 (UI/UX, Gestalt, 60-30-10)</div>
+          </div>
+        </div>
+
+        <!-- Filtrare Dificultate -->
+        <div>
+          <div class="config-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Nivel de Dificultate
+          </div>
+          <div class="pill-grid" id="diffPills">
+            <div class="choice-pill selected" onclick="app.setFilter('difficulty', 'ALL', this)">Toate Nivelurile</div>
+            <div class="choice-pill" onclick="app.setFilter('difficulty', 'Ușor', this)">Ușor</div>
+            <div class="choice-pill" onclick="app.setFilter('difficulty', 'Mediu', this)">Mediu</div>
+            <div class="choice-pill" onclick="app.setFilter('difficulty', 'Avansat', this)">Avansat</div>
+          </div>
+        </div>
+
+        <!-- Număr Întrebări -->
+        <div>
+          <div class="config-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Număr de Întrebări în Sesiune
+          </div>
+          <div class="pill-grid" id="countPills">
+            <div class="choice-pill" onclick="app.setFilter('count', 10, this)">10 Întrebări</div>
+            <div class="choice-pill selected" onclick="app.setFilter('count', 20, this)">20 Întrebări</div>
+            <div class="choice-pill" onclick="app.setFilter('count', 30, this)">30 Întrebări</div>
+            <div class="choice-pill" onclick="app.setFilter('count', 'MAX', this)">Toate Disponibile</div>
+          </div>
+        </div>
+
+        <!-- Start CTA & Secondary Actions -->
+        <div class="start-actions">
+          <button class="btn btn-primary" onclick="app.startQuiz()" style="font-size: 1.05rem; padding: 0.9rem 2rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Începe Testul Acum
+          </button>
+          <button class="btn btn-secondary" onclick="app.openStudyBrowser()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            Mod Studiu (Toate Răspunsurile)
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ============================================================
+         SCREEN 2: QUIZ IN PROGRESS
+         ============================================================ -->
+    <main id="screen-quiz" class="screen">
+      <div class="quiz-top-bar">
+        <div class="quiz-stats-row">
+          <div class="quiz-meta-group">
+            <span class="badge badge-course" id="qBadgeCourse">Curs 5</span>
+            <span class="badge badge-cat" id="qBadgeCat">Specificitate</span>
+            <span class="badge badge-diff-medium" id="qBadgeDiff">Mediu</span>
+          </div>
+
+          <div class="quiz-meta-group">
+            <div class="quiz-timer-pill" id="quizTimer">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span id="timerText">00:00</span>
+            </div>
+            <button class="btn-icon" onclick="app.confirmExit()" title="Abandonează testul">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-fill" id="progressBar"></div>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;" id="qCounterText">
+          Întrebarea 1 din 20
+        </div>
+        <h3 class="question-prompt" id="qPromptText">Întrebarea se încarcă...</h3>
+
+        <div class="code-block" id="qCodeBlock" style="display: none;"></div>
+
+        <div class="options-list" id="qOptionsContainer">
+          <!-- Opțiunile A, B, C, D sunt injectate dinamic -->
+        </div>
+
+        <div class="explanation-card" id="qExplanationCard">
+          <div class="explanation-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Explicație din Curs:
+          </div>
+          <div class="explanation-text" id="qExplanationText"></div>
+        </div>
+      </div>
+
+      <div class="quiz-bottom-actions">
+        <button class="btn btn-outline" id="prevBtn" onclick="app.prevQuestion()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Înapoi
+        </button>
+
+        <div style="font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-mono);">
+          Tastează: [A, B, C, D] sau [1, 2, 3, 4]
+        </div>
+
+        <button class="btn btn-primary" id="nextBtn" onclick="app.nextQuestion()">
+          Următoarea
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </main>
+
+    <!-- ============================================================
+         SCREEN 3: RESULTS / SUMMARY
+         ============================================================ -->
+    <main id="screen-results" class="screen">
+      <div class="results-hero">
+        <div class="score-circle">
+          <span class="score-val" id="resScoreVal">18</span>
+          <span class="score-total" id="resScoreTotal">din 20</span>
+        </div>
+        <div class="grade-badge" id="resGradeBadge">Nota: 9.00 / 10</div>
+        <h3 class="feedback-message" id="resFeedbackText">Excelent! Ai o înțelegere solidă a noțiunilor de CSS și UI Design.</h3>
+
+        <div class="results-stats-grid">
+          <div class="res-stat-card">
+            <div class="res-stat-label">Acuratețe</div>
+            <div class="res-stat-val" id="resAccuracy" style="color: var(--accent-primary);">90%</div>
+          </div>
+          <div class="res-stat-card">
+            <div class="res-stat-label">Răspunsuri Corecte</div>
+            <div class="res-stat-val" id="resCorrectCount" style="color: var(--color-success);">18</div>
+          </div>
+          <div class="res-stat-card">
+            <div class="res-stat-label">Greșite / Ocolite</div>
+            <div class="res-stat-val" id="resWrongCount" style="color: var(--color-danger);">2</div>
+          </div>
+          <div class="res-stat-card">
+            <div class="res-stat-label">Timp Total</div>
+            <div class="res-stat-val" id="resTotalTime">03:45</div>
+          </div>
+        </div>
+
+        <div class="start-actions" style="margin-top: 0.5rem; justify-content: center;">
+          <button class="btn btn-primary" onclick="app.restartQuiz(false)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+            Test Nou
+          </button>
+          <button class="btn btn-secondary" id="retryWrongBtn" onclick="app.retryMistakes()" style="display: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"></path><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            Reia doar Greșelile
+          </button>
+          <button class="btn btn-outline" onclick="app.showScreen('home')">
+            Meniu Principal
+          </button>
+        </div>
+      </div>
+
+      <!-- Performanță pe Cursuri -->
+      <div class="breakdown-card">
+        <h4 class="breakdown-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+          Performanță pe Capitole și Cursuri
+        </h4>
+        <div id="courseBreakdownList">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Revizuire Răspunsuri Detaliată -->
+      <div class="breakdown-card">
+        <h4 class="breakdown-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+          Revizuire Întrebări & Răspunsuri
+        </h4>
+        <div class="review-filter-row">
+          <button class="btn btn-outline" id="revFilterAll" onclick="app.filterReview('all', this)">Toate (<span id="revCountAll">0</span>)</button>
+          <button class="btn btn-outline" id="revFilterWrong" onclick="app.filterReview('wrong', this)">Doar Greșite (<span id="revCountWrong">0</span>)</button>
+          <button class="btn btn-outline" id="revFilterCorrect" onclick="app.filterReview('correct', this)">Doar Corecte (<span id="revCountCorrect">0</span>)</button>
+        </div>
+        <div id="reviewQuestionsList">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </main>
+
+    <!-- ============================================================
+         SCREEN 4: STUDY / FLASHCARDS BROWSER
+         ============================================================ -->
+    <main id="screen-study" class="screen">
+      <div class="hero-card" style="margin-bottom: 1.5rem;">
+        <h2 class="hero-title">Biblioteca de Întrebări & Cheat Sheet</h2>
+        <p class="hero-subtitle">
+          Consultă toate cele 52 de întrebări din cursurile de Tehnologii Web. Caută după cuvinte cheie (ex: specificitate, border-box, fitts, flex) sau filtrează pe cursuri pentru recapitulare rapidă.
+        </p>
+
+        <div class="study-search-bar">
+          <input type="text" id="studySearchInput" class="search-input" placeholder="Caută noțiuni (ex: currentColor, where, 60-30-10, gap, keyframes)..." oninput="app.renderStudyCards()">
+          <button class="btn btn-secondary" onclick="app.showScreen('home')">
+            ← Înapoi la Test
+          </button>
+        </div>
+
+        <div class="pill-grid" id="studyCourseFilters">
+          <div class="choice-pill selected" onclick="app.setStudyCourseFilter('ALL', this)">Toate</div>
+          <div class="choice-pill" onclick="app.setStudyCourseFilter('Curs 3', this)">Curs 3</div>
+          <div class="choice-pill" onclick="app.setStudyCourseFilter('Curs 5', this)">Curs 5</div>
+          <div class="choice-pill" onclick="app.setStudyCourseFilter('Curs 6', this)">Curs 6</div>
+          <div class="choice-pill" onclick="app.setStudyCourseFilter('Curs 7', this)">Curs 7</div>
+        </div>
+      </div>
+
+      <div id="studyCardsContainer">
+        <!-- Injected via JS -->
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      Quiz Tehnologii Web • Generat pe baza cursurilor Curs 3, Curs 5, Curs 6, Curs 7 (TW-CSS) • Funcționează complet offline
+    </footer>
+  </div>
+
+  <!-- MODAL CONFIRMATION -->
+  <div class="modal-overlay" id="exitModal">
+    <div class="modal-box">
+      <h3 class="modal-title">Abandonezi sesiunea curentă?</h3>
+      <p class="modal-text">Dacă ieși acum, progresul la acest test va fi resetat. Ești sigur că vrei să revii la ecranul principal?</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="app.closeModal()">Continuă Testul</button>
+        <button class="btn btn-danger" onclick="app.abortToHome()">Da, Ieși</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS DATA SOURCE -->
+  <script src="questions.js"></script>
+  <script>
+    // Fallback embedded in case opened standalone without questions.js file
+    if (typeof QUIZ_QUESTIONS === 'undefined' || !QUIZ_QUESTIONS.length) {
+      // Întrebări Grilă generate din cursurile TW-CSS (Curs 3, Curs 5, Curs 6, Curs 7)
+var QUIZ_QUESTIONS = [
+  {
+    "id": 1,
+    "course": "Curs 3",
+    "category": "Sintaxă & Baze CSS",
+    "difficulty": "Ușor",
+    "question": "Care este rolul distinct al limbajului CSS în raport cu HTML?",
+    "code": null,
+    "options": [
+      "HTML și CSS sunt interdependente și trebuie combinate obligatoriu în același fișier.",
+      "HTML reprezintă structura și conținutul unei pagini web, în timp ce CSS controlează aspectul și forma acestui conținut.",
+      "CSS gestionează logica dinamică și interogările la baza de date, iar HTML stilizează componentele.",
+      "CSS este un limbaj compilat pe server care generează arborele DOM."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 3 (Slide 2), cele două limbaje sunt independente. HTML reprezintă structura și conținutul unei pagini web, în timp ce CSS controlează aspectul și forma acestui conținut. Este o bună practică să nu se amestece codul CSS în interiorul documentului HTML."
+  },
+  {
+    "id": 2,
+    "course": "Curs 3",
+    "category": "Metode de Includere",
+    "difficulty": "Ușor",
+    "question": "Care sunt cele trei atribute standard ale etichetei <link> folosite pentru includerea unei foi de stil externe?",
+    "code": "<link rel=\"stylesheet\" href=\"css/styles.css\" type=\"text/css\">",
+    "options": [
+      "src, type, media",
+      "href, rel, type",
+      "url, rel, target",
+      "href, class, format"
+    ],
+    "answer": 1,
+    "explanation": "Elementul <link> (Curs 3, Slide 2) nu are tag de închidere, se plasează în <head> și folosește: href (calea către fișier), rel=\"stylesheet\" (relația documentului) și type=\"text/css\" (tipul MIME)."
+  },
+  {
+    "id": 3,
+    "course": "Curs 3",
+    "category": "Bune Practici",
+    "difficulty": "Ușor",
+    "question": "De ce este considerată utilizarea CSS-ului extern o bună practică (Good Practice)?",
+    "code": null,
+    "options": [
+      "Permite executarea regulilor CSS asincron pe plăci video dedicate.",
+      "Toate paginile site-ului pot partaja același fișier CSS, reducând redundanța, permițând caching-ul în browser și facilitând mentenanța centralizată.",
+      "Stilurile inline sunt deprecate și generează erori de compilare în HTML5.",
+      "Doar fișierele externe permit utilizarea variabilelor CSS și a pseudo-claselor."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 3 (Slide 3): Toate paginile partajează același fișier <link>, nu se repetă codul, site-ul se încarcă mai rapid (caching), modificările se fac într-un singur fișier, iar codul HTML este mai curat și ușor de citit."
+  },
+  {
+    "id": 4,
+    "course": "Curs 3",
+    "category": "Sintaxă & Reguli",
+    "difficulty": "Ușor",
+    "question": "Din ce componente principale este alcătuită o regulă CSS standard?",
+    "code": "h1 {\n  color: red;\n  font-size: 24px;\n}",
+    "options": [
+      "Dintr-un tag HTML și o funcție JavaScript.",
+      "Dintr-un selector și un bloc de declarații (perechi proprietate-valoare între acolade).",
+      "Dintr-o interogare media și o variabilă globală.",
+      "Dintr-o clasă și un eveniment DOM."
+    ],
+    "answer": 1,
+    "explanation": "O regulă CSS este compusă dintr-un selector (care identifică elementele țintă) urmat de acolade ce conțin una sau mai multe declarații (perechi proprietate-valoare separate prin două puncte și finalizate cu punct și virgulă)."
+  },
+  {
+    "id": 5,
+    "course": "Curs 3",
+    "category": "Proprietăți Speciale",
+    "difficulty": "Mediu",
+    "question": "Ce valoare va prelua bordura elementului în următorul fragment de cod ce utilizează cuvântul-cheie \"currentColor\"?",
+    "code": "<div style=\"color: blue; border: 1px dashed currentcolor;\">\n  Blue text\n</div>",
+    "options": [
+      "Negru (#000000), deoarece este culoarea implicită a browserului pentru borduri.",
+      "Albastru (blue), deoarece currentColor referă direct valoarea curentă a proprietății color a elementului.",
+      "Transparent, deoarece currentColor necesită o funcție de calcul.",
+      "Gri (gray), valoarea implicită din User Agent Stylesheet."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 3 (Slide 3), cuvântul-cheie currentColor reprezintă valoarea proprietății color a elementului (sau moștenită de la părinte). Astfel, chenarul devine albastru."
+  },
+  {
+    "id": 6,
+    "course": "Curs 3",
+    "category": "Selectori de Atribut",
+    "difficulty": "Mediu",
+    "question": "Care selector de atribut va selecta exclusiv link-urile ale căror adrese URL încep cu protocolul securizat \"https://\"?",
+    "code": null,
+    "options": [
+      "a[href*=\"https://\"]",
+      "a[href^=\"https://\"]",
+      "a[href$=\"https://\"]",
+      "a[href~=\"https://\"]"
+    ],
+    "answer": 1,
+    "explanation": "Sintaxa selectorilor de atribute (Curs 3, Slide 6): [attr^=\"val\"] înseamnă prefix (începe cu), [attr$=\"val\"] înseamnă sufix (se termină cu), iar [attr*=\"val\"] înseamnă că subșirul apare oriunde."
+  },
+  {
+    "id": 7,
+    "course": "Curs 3",
+    "category": "Combinatori CSS",
+    "difficulty": "Mediu",
+    "question": "Având structura HTML dată, care elemente <p> vor fi colorate în roșu de regula: \"div > p { color: red; }\"?",
+    "code": "<div>\n  <p>Paragraf 1</p>\n  <section>\n    <p>Paragraf 2</p>\n  </section>\n  <p>Paragraf 3</p>\n</div>",
+    "options": [
+      "Toate cele 3 paragrafe (Paragraf 1, 2 și 3).",
+      "Doar Paragraf 1 și Paragraf 3, deoarece sunt copii direcți (child) ai elementului <div>.",
+      "Doar Paragraf 2, fiind cel mai adânc imbricat.",
+      "Niciun paragraf, sintaxa este incorectă."
+    ],
+    "answer": 1,
+    "explanation": "Combinatorul copil direct \">\" selectează doar elementele care sunt direct descendente (copii de nivel 1). Paragraf 2 este copil al lui <section>, deci este doar descendent al <div>, nu copil direct."
+  },
+  {
+    "id": 8,
+    "course": "Curs 3",
+    "category": "Combinatori CSS",
+    "difficulty": "Mediu",
+    "question": "Ce element este vizat de combinatorul next-sibling definit prin regula: \"h1 + p\"?",
+    "code": "h1 + p {\n  font-weight: bold;\n}",
+    "options": [
+      "Toate paragrafele din interiorul titlului <h1>.",
+      "Toate paragrafele care urmează după <h1> în aceeași secțiune.",
+      "Doar primul paragraf <p> care este plasat imediat după elementul <h1>, având același părinte comun.",
+      "Paragrafele care au aceeași clasă ca și <h1>."
+    ],
+    "answer": 2,
+    "explanation": "Combinatorul \"+\" (Next-sibling) selectează elementul frate plasat imediat după primul element specificat la același nivel în ierarhia DOM."
+  },
+  {
+    "id": 9,
+    "course": "Curs 3",
+    "category": "Pseudo-clase Funcționale",
+    "difficulty": "Avansat",
+    "question": "Ce efect are regula CSS: \"p:has(img)\"?",
+    "code": "p:has(img) {\n  border: 2px solid green;\n}",
+    "options": [
+      "Aplică o bordură verde imaginilor <img> aflate în paragrafe.",
+      "Aplică o bordură verde oricărui paragraf <p> care conține în interiorul său cel puțin o imagine <img>.",
+      "Selectează paragrafele care sunt urmate imediat de o imagine.",
+      "Transformă paragraful într-un container flexibil pentru imagini."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 3 (Slide 8), :has() este o pseudo-clasă relațională/funcțională care permite selectarea unui element părinte în funcție de conținutul sau frații săi. \"p:has(img)\" selectează paragraful ce conține un <img>."
+  },
+  {
+    "id": 10,
+    "course": "Curs 3",
+    "category": "Pseudo-clase Link-uri",
+    "difficulty": "Ușor",
+    "question": "Care este ordinea corectă de definire a pseudo-claselor pentru stările link-urilor (regula LVHA)?",
+    "code": "/* Ordinea corectă în fișierul CSS */\na:link { ... }\na:visited { ... }\na:hover { ... }\na:active { ... }",
+    "options": [
+      ":hover, :active, :visited, :link",
+      ":link, :visited, :hover, :active",
+      ":active, :link, :hover, :visited",
+      ":visited, :link, :active, :hover"
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 3 (Slide 9), ordinea corectă pentru funcționarea corespunzătoare a stărilor de interacțiune conform cascadei este LVHA: :link, :visited, :hover, :active."
+  },
+  {
+    "id": 11,
+    "course": "Curs 3",
+    "category": "Pseudo-clase Structurale",
+    "difficulty": "Mediu",
+    "question": "Care selector va selecta rândurile impare dintr-un tabel (1, 3, 5, etc.)?",
+    "code": null,
+    "options": [
+      "tr:nth-child(even)",
+      "tr:nth-child(odd)",
+      "tr:first-child",
+      "tr:only-child"
+    ],
+    "answer": 1,
+    "explanation": "Pseudo-clasa :nth-child(odd) vizează copiii cu indici impari (1, 3, 5...), în timp ce :nth-child(even) vizează copiii pari (2, 4, 6...)."
+  },
+  {
+    "id": 12,
+    "course": "Curs 5",
+    "category": "Cascading Algorithm",
+    "difficulty": "Mediu",
+    "question": "Care este ordinea corectă de prioritizare a regulilor în algoritmul CSS Cascade?",
+    "code": null,
+    "options": [
+      "Order -> Specificity -> Inheritance -> Origin -> Importance",
+      "Importance -> Origin & Importance -> Specificity -> Order -> Inheritance",
+      "Inheritance -> Order -> Specificity -> Importance -> Origin",
+      "Specificity -> Order -> Origin -> Importance -> Inheritance"
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 5 (Slide 1), ordinea de prioritate este: 1. Importance (!important), 2. Origin (User Agent, User, Author), 3. Specificity (scorul selectorului), 4. Order (ordinea în fișier - ultima declarație câștigă), 5. Inheritance (moștenirea)."
+  },
+  {
+    "id": 13,
+    "course": "Curs 5",
+    "category": "Moștenire CSS (Quiz Curs)",
+    "difficulty": "Mediu",
+    "question": "Conform QUIZ-ului din Cursul 5 (Slide 3), care dintre următoarele proprietăți se moștenesc automat de la părinte la descendenți?",
+    "code": "/* Proprietăți evaluate: */\nFont, Color, Background, Box-sizing, Display",
+    "options": [
+      "Doar Background și Display",
+      "Font și Color",
+      "Box-sizing și Display",
+      "Toate cele 5 proprietăți se moștenesc"
+    ],
+    "answer": 1,
+    "explanation": "Proprietățile legate de conținutul textual și tipografie (font, color, line-height, text-align) se moștenesc automat. Proprietățile legate de cutie și layout (background, box-sizing, display, margin, padding, border) NU se moștenesc."
+  },
+  {
+    "id": 14,
+    "course": "Curs 5",
+    "category": "Specificitate CSS (Quiz Curs)",
+    "difficulty": "Avansat",
+    "question": "Care este scorul de specificitate al selectorului \"header.navigation p\" (reprezentat ca vector: Inline, ID, Clasă/Pseudo-clasă/Atribut, Element)?",
+    "code": "header.navigation p {\n  color: blue;\n}",
+    "options": [
+      "0, 1, 0, 1",
+      "0, 0, 1, 2",
+      "0, 0, 2, 1",
+      "1, 0, 1, 2"
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 5 (Slide 4): 0 stiluri inline, 0 ID-uri, 1 clasă (.navigation) și 2 elemente HTML (header și p). Rezultă vectorul (0, 0, 1, 2)."
+  },
+  {
+    "id": 15,
+    "course": "Curs 5",
+    "category": "Specificitate CSS (Quiz Curs)",
+    "difficulty": "Avansat",
+    "question": "Comparând regulile \"#item1 { color: green; }\" și \"[id=\\\"item1\\\"] { color: lightgreen; }\", care regulă câștigă și de ce?",
+    "code": "<p id=\"item1\">First Item</p>",
+    "options": [
+      "Câștigă [id=\"item1\"] deoarece este un selector de atribut modern.",
+      "Câștigă #item1 deoarece un selector de ID are specificitatea (0, 1, 0, 0), în timp ce un selector de atribut are doar specificitate de clasă (0, 0, 1, 0).",
+      "Au aceeași specificitate și se aplică întotdeauna ultima regulă scrisă.",
+      "Niciuna nu este validă fără specificarea tag-ului <p>."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 5 (Slide 5), un selector de ID direct (#item1) contribuie cu 1 pe coloana a doua de specificitate (0,1,0,0). În schimb, selectorul de atribut [id=\"...\"] contribuie pe coloana a treia (0,0,1,0), având o pondere mult mai mică."
+  },
+  {
+    "id": 16,
+    "course": "Curs 5",
+    "category": "Pseudo-clase Moderne",
+    "difficulty": "Avansat",
+    "question": "De ce este recomandată utilizarea pseudo-clasei :where() în dezvoltarea bibliotecilor de componente UI?",
+    "code": ".card :where(h1, h2, p) {\n  color: var(--text-color);\n}",
+    "options": [
+      "Pentru că accelerează randarea în GPU prin WebGL.",
+      "Pentru că :where() are întotdeauna specificitate zero (0, 0, 0, 0), permițând dezvoltatorilor care folosesc biblioteca să suprascrie stilurile foarte ușor.",
+      "Pentru că blochează moștenirea proprietăților către elementele copil.",
+      "Pentru că obligă toate tag-urile să folosească același font."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 5 (Slide 6): :where() grupează selectori dar are specificitate zero. Spre deosebire de :is() (care preia specificitatea maximă din grup), :where() facilitează suprascrierea facilă a regulilor de către utilizatorii bibliotecii."
+  },
+  {
+    "id": 17,
+    "course": "Curs 5",
+    "category": "Pseudo-elemente",
+    "difficulty": "Mediu",
+    "question": "Care dintre următoarele afirmații despre conținutul inserat prin pseudo-elementele ::before și ::after este ADEVĂRATĂ?",
+    "code": "button::after {\n  content: \" →\";\n}",
+    "options": [
+      "Textul inserat poate fi selectat cu mouse-ul și copiat în clipboard ca orice alt text HTML.",
+      "Proprietatea \"content\" este obligatorie, iar conținutul generat este pur vizual (nu face parte din DOM-ul accesibil și poate să nu fie citit de screen readers).",
+      "Este necesar un tag HTML special <after> în document.",
+      "Nu poate fi stilizat cu proprietăți de culoare sau font."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 5 (Slide 7): Proprietatea content este obligatorie. Conținutul generat este pur vizual, nu poate fi selectat cu mouse-ul și nu este garantat că va fi citit corect de screen readers, fiind recomandat exclusiv pentru decor."
+  },
+  {
+    "id": 18,
+    "course": "Curs 5",
+    "category": "Pseudo-elemente",
+    "difficulty": "Ușor",
+    "question": "Ce pseudo-element CSS permite modificarea culorii de fundal și a textului atunci când utilizatorul selectează un fragment de text cu mouse-ul?",
+    "code": "::selection {\n  background: #ffec3d;\n  color: #000;\n}",
+    "options": [
+      "::highlight",
+      "::selection",
+      "::focus-within",
+      "::active-text"
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 5 (Slide 7), pseudo-elementul ::selection permite aplicarea stilurilor asupra porțiunii de document selectată activ de către utilizator."
+  },
+  {
+    "id": 19,
+    "course": "Curs 5",
+    "category": "Variabile CSS",
+    "difficulty": "Ușor",
+    "question": "Cum se definește o variabilă CSS și cum se citește valoarea ei în cadrul unei reguli?",
+    "code": null,
+    "options": [
+      "$color = #333; color: $color;",
+      "--main-color: #333; color: var(--main-color);",
+      "@color: #333; color: get(@color);",
+      "var-color: #333; color: read(var-color);"
+    ],
+    "answer": 1,
+    "explanation": "Variabilele CSS (Custom Properties) se declară începând obligatoriu cu prefixul \"--\" (ex: --main-color: #333;) și se accesează prin funcția \"var(--main-color)\"."
+  },
+  {
+    "id": 20,
+    "course": "Curs 5",
+    "category": "CSS Box Model",
+    "difficulty": "Mediu",
+    "question": "Ce calculează browserul pentru lățimea totală a unei casete dacă aplicăm \"box-sizing: border-box\"?",
+    "code": ".box {\n  box-sizing: border-box;\n  width: 300px;\n  padding: 20px;\n  border: 5px solid black;\n}",
+    "options": [
+      "350px (300px conținut + 40px padding + 10px bordură).",
+      "300px exact (lățimea declarată include deja padding-ul și bordura, conținutul interior fiind redus la 250px).",
+      "250px pe ecran.",
+      "325px pe ecran."
+    ],
+    "answer": 1,
+    "explanation": "La box-sizing: border-box (Curs 5, Slide 10-11), valorile width și height includ padding-ul și border-ul. Lățimea totală rămâne exact 300px, dimensiunea zonei de conținut ajustându-se automat (300 - 40 - 10 = 250px)."
+  },
+  {
+    "id": 21,
+    "course": "Curs 5",
+    "category": "Unități de Măsură",
+    "difficulty": "Mediu",
+    "question": "Dacă rădăcina documentului are font-size: 16px, iar un container are font-size: 2em și conține un paragraf cu font-size: 1.5em, ce dimensiune va avea textul paragrafului?",
+    "code": "html { font-size: 16px; }\n.container { font-size: 2em; }\n.container p { font-size: 1.5em; }",
+    "options": [
+      "24px",
+      "48px (16px * 2 * 1.5)",
+      "32px",
+      "16px"
+    ],
+    "answer": 1,
+    "explanation": "Unitatea \"em\" este relativă la font-size-ul elementului părinte direct (compounding effect). Containerul devine 16px * 2 = 32px. Paragraful din interior devine 32px * 1.5 = 48px."
+  },
+  {
+    "id": 22,
+    "course": "Curs 5",
+    "category": "Shorthand & Usability (Quiz Curs)",
+    "difficulty": "Ușor",
+    "question": "Conform QUIZ-ului de rescriere din Cursul 5 (Slide 16), cum se simplifică declarațiile următoare pentru a respecta bunele practici de concizie?",
+    "code": ".container {\n  padding: 3px 5px 3px 5px;\n  margin: 3px 5px 3px 5px;\n  border-radius: 3px 3px 0 0;\n}",
+    "options": [
+      "padding: 8px; margin: 8px; border-radius: 6px;",
+      "padding: 3px 5px; margin: 3px 5px; border-radius: 3px 3px 0 0;",
+      "padding: 3px; margin: 5px; border-radius: 3px 0;",
+      "padding-margin: 3px 5px; border-radius: top 3px;"
+    ],
+    "answer": 1,
+    "explanation": "Sintaxa shorthand cu două valori: prima valoare indică top/bottom (3px), iar a doua valoare indică left/right (5px). Astfel, \"padding: 3px 5px 3px 5px;\" devine concis \"padding: 3px 5px;\"."
+  },
+  {
+    "id": 23,
+    "course": "Curs 5",
+    "category": "Poziționare CSS",
+    "difficulty": "Mediu",
+    "question": "Ce se întâmplă cu spațiul inițial ocupat în fluxul documentului de un element configurat cu \"position: absolute\"?",
+    "code": ".item {\n  position: absolute;\n  top: 50px;\n}",
+    "options": [
+      "Spațiul inițial este păstrat gol, celelalte elemente ocolindu-l.",
+      "Elementul este scos complet din fluxul normal al documentului, iar elementele vecine se rearanjează ocupând spațiul ca și cum acesta nu ar exista.",
+      "Spațiul se dublează pe verticală.",
+      "Elementul își pierde lățimea și devine invizibil."
+    ],
+    "answer": 1,
+    "explanation": "Poziționarea absolută (Curs 5, Slide 18) scoate elementul din fluxul normal (out of flow), astfel încât acesta nu mai ocupă spațiu în structura paginii."
+  },
+  {
+    "id": 24,
+    "course": "Curs 5",
+    "category": "Poziționare & z-index",
+    "difficulty": "Ușor",
+    "question": "În ce condiție funcționează proprietatea \"z-index\" pe un element HTML din fluxul standard?",
+    "code": ".box {\n  z-index: 10;\n}",
+    "options": [
+      "Funcționează oricând pe orice element, inclusiv pe cele cu position: static.",
+      "Funcționează doar dacă elementul este poziționat (are position: relative, absolute, fixed sau sticky) ori este copil al unui flex/grid container.",
+      "Funcționează doar dacă elementul conține o imagine.",
+      "Funcționează doar dacă valoarea este negativă."
+    ],
+    "answer": 1,
+    "explanation": "Proprietatea z-index (Curs 5, Slide 19) controlează ordinea de stivuire pe axa Z și se aplică doar elementelor poziționate (non-static) sau elementelor flex/grid."
+  },
+  {
+    "id": 25,
+    "course": "Curs 5",
+    "category": "Float & Clearfix",
+    "difficulty": "Mediu",
+    "question": "De ce apare fenomenul de colaps al înălțimii unui container părinte atunci când toți copiii săi au \"float: left\"?",
+    "code": null,
+    "options": [
+      "Pentru că elementele flotante sunt scoase din fluxul normal al documentului, iar containerul își calculează înălțimea ca fiind 0 dacă nu conține alte elemente în flux.",
+      "Din cauza unei erori de compatibilitate din standardul HTML5.",
+      "Pentru că proprietatea float forțează înălțimea părintelui la 100vh.",
+      "Deoarece proprietatea clear este activată automat."
+    ],
+    "answer": 0,
+    "explanation": "Conform Cursului 5 (Slide 20-21), elementele flotante sunt scoase din fluxul normal. Prin urmare, containerul părinte nu le include în calculul automat al înălțimii, colapsând la 0 în lipsa unui mecanism precum display: flow-root sau clearfix."
+  },
+  {
+    "id": 26,
+    "course": "Curs 5",
+    "category": "Responsive & Media Queries",
+    "difficulty": "Ușor",
+    "question": "Ce reprezintă abordarea \"Mobile-First\" în scrierea regulilor CSS?",
+    "code": "/* Exemplu: */\n.card { width: 100%; }\n@media screen and (min-width: 768px) {\n  .card { width: 50%; }\n}",
+    "options": [
+      "Scrierea codului exclusiv pentru telefoane, blocând accesul utilizatorilor de pe calculatoare.",
+      "Definirea stilurilor de bază inițiale pentru ecrane mici, urmată de interogări media cu (min-width) pentru a adapta și îmbogăți layout-ul pe măsură ce ecranul devine mai lat.",
+      "Utilizarea regulilor (max-width) începând de la ecrane mari de 4K către telefoane.",
+      "Forțarea dimensiunilor în pixeli absoluți pe toate dispozitivele."
+    ],
+    "answer": 1,
+    "explanation": "Mobile-first presupune stilizarea de bază fără media queries orientată către dispozitive mobile, adăugând apoi reguli condiționate prin @media (min-width: ...) pe măsură ce spațiul pe ecran crește."
+  },
+  {
+    "id": 27,
+    "course": "Curs 5",
+    "category": "Grid 12 Coloane",
+    "difficulty": "Ușor",
+    "question": "Într-un sistem de layout responsive pe 12 coloane, ce lățime procentuală are o clasă pentru 3 coloane (.col-3)?",
+    "code": ".col-3 {\n  width: ?%;\n}",
+    "options": [
+      "30%",
+      "25% (3 * 8.333%)",
+      "33.33%",
+      "20%"
+    ],
+    "answer": 1,
+    "explanation": "O coloană reprezintă 100% / 12 = 8.333%. Trei coloane reprezintă 3 * 8.333% = 25% (un sfert din lățimea containerului)."
+  },
+  {
+    "id": 28,
+    "course": "Curs 6",
+    "category": "Flexbox",
+    "difficulty": "Mediu",
+    "question": "Ce efect are setarea \"flex: 1\" asupra elementelor copil dintr-un container flexibil?",
+    "code": ".col {\n  flex: 1;\n}",
+    "options": [
+      "Forțează lățimea elementului la 1px fix.",
+      "Este echivalentă cu \"flex: 1 1 0%\", făcând ca toate coloanele să aibă lățimi riguros egale, plecând de la aceeași bază nulă indiferent de conținutul textual.",
+      "Permite doar primului element să se extindă, blocându-le pe celelalte.",
+      "Dezactivează proprietatea flex-wrap."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 6 (Slide 4): flex: 1 este echivalent cu \"flex: 1 1 0%\", generând coloane egale deoarece elementele pleacă de la aceeași bază, indiferent de cât text conțin."
+  },
+  {
+    "id": 29,
+    "course": "Curs 6",
+    "category": "Flexbox",
+    "difficulty": "Ușor",
+    "question": "Care este diferența dintre axa principală (main axis) și axa transversală (cross axis) în Flexbox?",
+    "code": null,
+    "options": [
+      "Axa principală este întotdeauna verticală, iar cea transversală este orizontală.",
+      "Direcția axei principale este determinată de proprietatea \"flex-direction\" (implicit 'row' orizontal sau 'column' vertical), iar axa transversală este perpendiculară pe aceasta.",
+      "Nu există axe în Flexbox, acestea apar doar în CSS Grid.",
+      "Axa principală controlează culoarea, iar axa transversală dimensiunea."
+    ],
+    "answer": 1,
+    "explanation": "În Flexbox, direcția fluxului este dată de flex-direction. Axa principală (main axis) este aliniată de justify-content, iar axa perpendiculară (cross axis) este aliniată de align-items."
+  },
+  {
+    "id": 30,
+    "course": "Curs 6",
+    "category": "CSS Grid",
+    "difficulty": "Mediu",
+    "question": "Care este deosebirea fundamentală dintre Flexbox și CSS Grid conform Cursului 6?",
+    "code": null,
+    "options": [
+      "Flexbox este conceput pentru animații 3D, iar Grid pentru formulare.",
+      "Flexbox este un sistem de organizare unidimensional (pe o singură axă, rând sau coloană), în timp ce CSS Grid este bidimensional (permite definirea simultană a rândurilor și coloanelor).",
+      "CSS Grid nu permite spațiere prin proprietatea gap.",
+      "Flexbox funcționează doar în browsere mobile."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 6 (Slide 2) și Cursului 5 (Slide 29): Flexbox este unidimensional (1D), conceput pentru distribuire pe o axă, în timp ce CSS Grid este bidimensional (2D), permițând definirea simultană a rândurilor și coloanelor."
+  },
+  {
+    "id": 31,
+    "course": "Curs 6",
+    "category": "CSS Grid",
+    "difficulty": "Avansat",
+    "question": "Ce rol are funcția \"minmax(200px, 1fr)\" utilizată în definirea coloanelor unui grid?",
+    "code": ".grid {\n  grid-template-columns: repeat(3, minmax(200px, 1fr));\n}",
+    "options": [
+      "Restrânge gridul la exact 200 de coloane.",
+      "Stabilește că fiecare coloană va avea o lățime minimă de 200px și se va putea extinde până la o fracțiune (1fr) din spațiul rămas liber.",
+      "Calculează valoarea medie dintre 200px și lățimea ecranului.",
+      "Ascunde coloanele care au conținut mai mic de 200px."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 6 (Slide 17), funcția minmax(minim, maxim) permite definirea unei dimensiuni minime de siguranță și a unei dimensiuni maxime flexibile pentru un grid track."
+  },
+  {
+    "id": 32,
+    "course": "Curs 6",
+    "category": "CSS Grid",
+    "difficulty": "Mediu",
+    "question": "Cum se întinde un element pe toată lățimea unui grid cu număr necunoscut de coloane folosind indici de linii negativi?",
+    "code": ".banner {\n  grid-column: ?;\n}",
+    "options": [
+      "grid-column: 0 / 100;",
+      "grid-column: 1 / -1;",
+      "grid-column: all;",
+      "grid-column: 1 / end-of-row;"
+    ],
+    "answer": 1,
+    "explanation": "În CSS Grid, liniile pot fi referite și prin numere negative începând de la sfârșit. Linia \"-1\" reprezintă ultima linie a gridului explicit. Prin urmare, \"grid-column: 1 / -1\" acoperă de la prima până la ultima coloană."
+  },
+  {
+    "id": 33,
+    "course": "Curs 6",
+    "category": "CSS Grid Shorthand",
+    "difficulty": "Avansat",
+    "question": "Ce reprezintă valorile din declarația shorthand: \"grid: 100px 300px / 3fr 1fr;\" (Curs 6, Slide 14)?",
+    "code": ".container {\n  grid: 100px 300px / 3fr 1fr;\n}",
+    "options": [
+      "2 coloane de 100px și 300px, respectiv 2 rânduri de 3fr și 1fr.",
+      "2 rânduri (primul de 100px, al doilea de 300px) și 2 coloane (prima de 3fr, a doua de 1fr).",
+      "Lățimea maximă de 100px și înălțimea de 300px a containerului.",
+      "O matrice 3D cu 4 cadrane de animație."
+    ],
+    "answer": 1,
+    "explanation": "În shorthand-ul CSS \"grid: <grid-template-rows> / <grid-template-columns>\", valorile dinaintea slash-ului definesc rândurile (100px și 300px), iar cele de după slash definesc coloanele (3fr și 1fr)."
+  },
+  {
+    "id": 34,
+    "course": "Curs 6",
+    "category": "Culori & Accesibilitate",
+    "difficulty": "Mediu",
+    "question": "Conform standardelor internaționale de accesibilitate web WCAG prezentate în Cursul 6 (Slide 21), care este raportul minim de contrast impus pentru textul normal?",
+    "code": null,
+    "options": [
+      "2:1",
+      "3:1",
+      "4.5:1",
+      "7:1"
+    ],
+    "answer": 2,
+    "explanation": "Ghidul WCAG (Nivel AA) cere un contrast minim de 4.5:1 pentru textul normal și 3:1 pentru textul mare (peste 18pt sau 14pt bold) pentru a asigura lizibilitatea persoanelor cu deficiențe de vedere."
+  },
+  {
+    "id": 35,
+    "course": "Curs 6",
+    "category": "Culori în CSS",
+    "difficulty": "Ușor",
+    "question": "Cum este reprezentat canalul alpha de transparență în formatul modern de culoare \"hsl(210 100% 50% / 0.8)\"?",
+    "code": "background-color: hsl(210 100% 50% / 0.8);",
+    "options": [
+      "Prin primul număr (210).",
+      "Prin valoarea de după caracterul slash (0.8, adică 80% opacitate).",
+      "Nu există canal de transparență în exemplul dat.",
+      "Prin procentul de 100%."
+    ],
+    "answer": 1,
+    "explanation": "În specificația CSS Color Module Level 4, canalul alpha se separă de parametrii de culoare (nuanță, saturație, luminozitate) printr-un slash (/)."
+  },
+  {
+    "id": 36,
+    "course": "Curs 6",
+    "category": "Gradients",
+    "difficulty": "Ușor",
+    "question": "Care funcție CSS este utilizată pentru a crea un fundal cu trecere cromatică circulară pornind din centru?",
+    "code": "background-image: radial-gradient(circle, #f06, #4a90e2);",
+    "options": [
+      "linear-gradient()",
+      "radial-gradient()",
+      "conic-gradient()",
+      "box-gradient()"
+    ],
+    "answer": 1,
+    "explanation": "Funcția radial-gradient() produce o imagine generată procedural ce radiază dintr-un punct central (circular sau eliptic)."
+  },
+  {
+    "id": 37,
+    "course": "Curs 6",
+    "category": "Tipografie UI/UX",
+    "difficulty": "Mediu",
+    "question": "Conform Cursului 6 (Slide 25-27), care este distincția între Kerning și Tracking?",
+    "code": null,
+    "options": [
+      "Tracking se aplică pe verticală, iar Kerning pe orizontală.",
+      "Tracking (letter-spacing) ajustează spațiul uniform între toate literele dintr-un text, în timp ce Kerning ajustează spațiul specific dintre anumite perechi de litere pentru a corecta golurile optice inegale.",
+      "Kerning este o proprietate CSS care schimbă culoarea literelor.",
+      "Tracking se folosește doar pentru fonturi cursive."
+    ],
+    "answer": 1,
+    "explanation": "Tracking este uniform pe întregul cuvânt/paragraf. Kerning-ul compensează forma geometrică a anumitor litere puse una lângă alta (cum ar fi 'AV', 'WA', 'To') astfel încât spațierea să pară armonioasă ochiului uman."
+  },
+  {
+    "id": 38,
+    "course": "Curs 6",
+    "category": "Tipografie CSS",
+    "difficulty": "Ușor",
+    "question": "Ce valoare numerică a proprietății \"font-weight\" corespunde textului cu greutate normală (regular)?",
+    "code": "p {\n  font-weight: 400;\n}",
+    "options": [
+      "100",
+      "400",
+      "700",
+      "900"
+    ],
+    "answer": 1,
+    "explanation": "Scara tipografică standard în CSS definește: 400 = normal (regular) și 700 = bold. Valorile 100-300 sunt light/thin, iar 800-900 sunt extra-bold/black."
+  },
+  {
+    "id": 39,
+    "course": "Curs 6",
+    "category": "Animații CSS - Tranziții",
+    "difficulty": "Ușor",
+    "question": "Având declarația: \"transition: background-color 0.3s ease 0.1s;\", ce reprezintă valoarea \"0.1s\"?",
+    "code": "button {\n  transition: background-color 0.3s ease 0.1s;\n}",
+    "options": [
+      "Durata totală de rulare a tranziției.",
+      "Timpul de întârziere (transition-delay) înainte ca tranziția să înceapă.",
+      "Numărul de iterații ale animației.",
+      "Intensitatea efectului de estompare."
+    ],
+    "answer": 1,
+    "explanation": "Sintaxa shorthand a tranziției este: transition: <property> <duration> <timing-function> <delay>. Prima durată (0.3s) este timpul de execuție, iar a doua (0.1s) este întârzierea (delay)."
+  },
+  {
+    "id": 40,
+    "course": "Curs 6",
+    "category": "Animații CSS - Keyframes",
+    "difficulty": "Mediu",
+    "question": "Cum se definește o animație bazată pe cadre-cheie cu mai multe etape intermediare în CSS?",
+    "code": "@keyframes slideIn {\n  0%   { opacity: 0; transform: translateY(-20px); }\n  50%  { opacity: 0.5; }\n  100% { opacity: 1; transform: translateY(0); }\n}",
+    "options": [
+      "Folosind directiva @animate",
+      "Folosind directiva @keyframes urmată de numele animației și etape procentuale sau from/to",
+      "Prin intermediul funcției JavaScript setInterval()",
+      "Prin tagul HTML <animation>"
+    ],
+    "answer": 1,
+    "explanation": "Animațiile CSS se definesc prin directiva @keyframes, urmată de un identificator/nume și de pași intermediari stabiliți prin procente (0% - 100%) sau cuvintele cheie from / to."
+  },
+  {
+    "id": 41,
+    "course": "Curs 6",
+    "category": "Micro-interacțiuni UI",
+    "difficulty": "Mediu",
+    "question": "Conform cărții lui Dan Saffer citate în Cursul 6 (Slide 41-42), care este scopul principal al unei micro-interacțiuni într-o interfață digitală?",
+    "code": null,
+    "options": [
+      "Să ruleze procese de inteligență artificială în fundal.",
+      "Să comunice prompt rezultatul unei acțiuni a utilizatorului, să evidențieze modificările de stare ale sistemului și să prevină erorile prin feedback vizual/auditiv de scurtă durată.",
+      "Să sporească dimensiunea fișierului CSS.",
+      "Să deschidă ferestre modale nesolicitate."
+    ],
+    "answer": 1,
+    "explanation": "Micro-interacțiunile sunt detalii de design axate pe o singură sarcină (ex: un buton de 'Like', un switch toggle, un indicator de încărcare). Ele oferă feedback imediat utilizatorului, confirmând primirea comenzii."
+  },
+  {
+    "id": 42,
+    "course": "Curs 7",
+    "category": "Percepție & UX",
+    "difficulty": "Ușor",
+    "question": "Ce afirmă studiul Nielsen Norman Group (2024) prezentat în Cursul 7 cu privire la percepția utilizatorilor?",
+    "code": null,
+    "options": [
+      "Utilizatorii acordă în medie 5 minute pentru a evalua dacă le place designul unui site.",
+      "„Percepția precede cogniția”: utilizatorii analizează layout-ul și își formează o judecată vizuală despre credibilitatea site-ului în mai puțin de 50 de milisecunde (< 0.05s).",
+      "Toți utilizatorii preferă layout-urile asimetrice fără aliniere.",
+      "Cogniția este complet independentă de indiciile vizuale."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 7 (Slide 21), percepția precede cogniția. Prima impresie vizuală se formează subconștient în mai puțin de 50ms, dictând încrederea și dorința utilizatorului de a continua navigarea."
+  },
+  {
+    "id": 43,
+    "course": "Curs 7",
+    "category": "Principii Gestalt",
+    "difficulty": "Mediu",
+    "question": "Ce descrie principiul Gestalt de „Similaritate” (Similarity) în proiectarea UI?",
+    "code": null,
+    "options": [
+      "Toate site-urile trebuie să semene între ele.",
+      "Elementele vizuale care împărtășesc caracteristici similare (culoare, formă, dimensiune, orientare) sunt percepute automat de creier ca făcând parte din același grup funcțional.",
+      "Textul trebuie să fie identic pe toate butoanele.",
+      "Dimensiunea fontului trebuie să fie similară pe întreaga pagină."
+    ],
+    "answer": 1,
+    "explanation": "Principiul similarității afirmă că ochiul uman asociază spontan elementele ce au aceleași atribute vizuale (de exemplu, toate link-urile albastre sau toate butoanele primare verzi)."
+  },
+  {
+    "id": 44,
+    "course": "Curs 7",
+    "category": "Principii de Design CRAP",
+    "difficulty": "Mediu",
+    "question": "Care sunt cele 4 mari principii de proiectare vizuală stabilite de Robin Williams în lucrarea „The Non-Designer’s Design Book”?",
+    "code": null,
+    "options": [
+      "Color, Robustness, Architecture, Pixel",
+      "Contrast, Repetiție, Aliniere, Proximitate (CRAP)",
+      "Creation, Rendering, Animation, Production",
+      "Components, Redundancy, Adaptability, Position"
+    ],
+    "answer": 1,
+    "explanation": "Cele 4 principii fundamentale CRAP sunt: Contrast (evidențierea diferențelor), Repetition (repetiția pentru unitate), Alignment (alinierea pentru coeziune) și Proximity (proximitatea pentru gruparea logică)."
+  },
+  {
+    "id": 45,
+    "course": "Curs 7",
+    "category": "Principii de Design CRAP",
+    "difficulty": "Ușor",
+    "question": "Conform principiului Contrastului din Cursul 7, cum trebuie tratate elementele dintr-o pagină dacă nu sunt identice?",
+    "code": null,
+    "options": [
+      "Trebuie făcute doar foarte puțin diferite, aproape insesizabil.",
+      "Dacă două elemente nu sunt exact la fel, trebuie făcute foarte diferite pentru a atrage atenția și a stabili o ierarhie vizuală clară.",
+      "Trebuie ascunse pe ecrane mici.",
+      "Trebuie colorate obligatoriu în tonuri de gri."
+    ],
+    "answer": 1,
+    "explanation": "Regula de bază a contrastului enunțată de Robin Williams: nu fi timid! Dacă două elemente sunt diferite (titlu vs paragraf, buton activ vs inactiv), fă diferența clară și evidentă (contrast puternic = energie și focalizare)."
+  },
+  {
+    "id": 46,
+    "course": "Curs 7",
+    "category": "Principii de Design CRAP",
+    "difficulty": "Mediu",
+    "question": "Ce afirmă principiul Alinierii (Alignment) despre dispunerea elementelor într-un design web?",
+    "code": null,
+    "options": [
+      "Fiecare element poate fi pus oriunde pe ecran unde există spațiu liber disponibil.",
+      "Nimic nu ar trebui plasat arbitrar pe pagină; fiecare element trebuie să aibă o legătură vizuală și o aliniere clară cu un alt element, asigurând coeziune și ordine.",
+      "Toate textele dintr-o pagină trebuie aliniate obligatoriu la dreapta.",
+      "Alinierea matematică este întotdeauna superioară alinierii optice percepute de ochiul uman."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 7 (Slide 35-41), alinierea creează coeziune și conectează elemente deconectate spațial. Nimic nu trebuie să pară aruncat la întâmplare pe ecran."
+  },
+  {
+    "id": 47,
+    "course": "Curs 7",
+    "category": "Legea lui Fitts",
+    "difficulty": "Mediu",
+    "question": "Ce implicație directă are Legea lui Fitts (Fitts’s Law) în proiectarea butoanelor și a formularelor web?",
+    "code": "T = a + b * log2(2D / W)",
+    "options": [
+      "Butoanele trebuie să fie cât mai mici pentru a economisi spațiu pe ecran.",
+      "„Big and near objects are easy to click”: elementele interactive cheie (cum ar fi butoanele CTA) trebuie să aibă o țintă de click suficient de generoasă și să fie plasate aproape de traiectoria naturală a utilizatorului.",
+      "Numărul de culori de pe ecran influențează direct viteza procesorului.",
+      "Formularele trebuie să conțină cel puțin 20 de câmpuri de introducere."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 7 (Slide 50), timpul necesar pentru a atinge o țintă depinde de distanța (D) și lățimea/dimensiunea (W) acesteia. Obiectele mari și apropiate sunt cele mai ușor și rapid de acționat."
+  },
+  {
+    "id": 48,
+    "course": "Curs 7",
+    "category": "Regula 60-30-10",
+    "difficulty": "Ușor",
+    "question": "Cum se împart proporțiile culorilor într-o interfață web conform Regulii 60-30-10 (Curs 7, Slide 65-66)?",
+    "code": null,
+    "options": [
+      "60% imagini, 30% text, 10% iconițe",
+      "60% Culoarea principală/de fundal, 30% Culoarea secundară (structură, carduri), 10% Culoarea de accent (butoane CTA, puncte focale)",
+      "60% negru, 30% gri, 10% alb",
+      "60% contrast, 30% luminozitate, 10% saturație"
+    ],
+    "answer": 1,
+    "explanation": "Regula 60-30-10 asigură echilibrul cromatic: 60% domină fundalul și suprafețele mari, 30% susține elementele structurale și cardurile, iar 10% (accentul) este rezervat pentru elementele interactive de maxim interes (butoane CTA, notificări)."
+  },
+  {
+    "id": 49,
+    "course": "Curs 7",
+    "category": "Landing Page & Conversie",
+    "difficulty": "Ușor",
+    "question": "Ce este „Propunerea de Valoare” (Value Proposition) pe un Landing Page eficient?",
+    "code": null,
+    "options": [
+      "O listă de prețuri detaliată cu toate monedele internaționale.",
+      "Un mesaj clar și concis (de regulă în titlul principal) care comunică imediat beneficiul unic pe care produsul sau serviciul îl aduce utilizatorului și problema pe care o rezolvă.",
+      "Termenii legali de licențiere a software-ului.",
+      "O animație complexă de deschidere a paginii."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 7 (Slide 55), propunerea de valoare evidențiază direct de ce ar alege utilizatorul această soluție, comunicând imediat și fără jargon tehnic beneficiul principal."
+  },
+  {
+    "id": 50,
+    "course": "Curs 7",
+    "category": "Landing Page & Încredere",
+    "difficulty": "Ușor",
+    "question": "Ce rol joacă secțiunile de „Social Proof” (recenzii, evaluări de 5 stele, testimoniale) pe o pagină web?",
+    "code": null,
+    "options": [
+      "Să verifice dacă utilizatorul este conectat la o rețea de socializare.",
+      "Să consolideze încrederea vizitatorilor și să reducă ezitarea de cumpărare prin validarea oferită de experiențele pozitive ale altor clienți reali.",
+      "Să crească viteza de încărcare a resurselor statice.",
+      "Să înlocuiască complet descrierea produsului."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 7 (Slide 61), Social Proof demonstrează potențialilor utilizatori că produsul este validat de oameni reali, crescând dramatic rata de conversie și încrederea în brand."
+  },
+  {
+    "id": 51,
+    "course": "Curs 7",
+    "category": "Simplitate & UX",
+    "difficulty": "Ușor",
+    "question": "Ce recomandă Cursul 7 pentru prevenirea încărcării cognitive a utilizatorului pe o pagină web?",
+    "code": null,
+    "options": [
+      "Afișarea a cât mai multe bannere și opțiuni simultane pe primul ecran.",
+      "Evitarea supraîncărcării vizuale: un titlu concis, un singur CTA primar clar, imagini contextuale relevante și eliminarea oricărui element care nu servește obiectivului paginii.",
+      "Dezactivarea barei de derulare și a tastaturii.",
+      "Adăugarea a cel puțin 5 formulare de contact pe fiecare pagină."
+    ],
+    "answer": 1,
+    "explanation": "Conform Cursului 7 (Slide 46, 53), principiul simplității recomandă eliminarea elementelor inutile ('Perfection is achieved when there is nothing left to take away') pentru a menține interfața aerisită și focalizată pe acțiunea dorită."
+  },
+  {
+    "id": 52,
+    "course": "Curs 6 & 7",
+    "category": "Gradients & Backgrounds",
+    "difficulty": "Mediu",
+    "question": "Care este sintaxa CSS corectă pentru un gradient liniar la 90 de grade (orizontal) ce trece de la galben la roșu?",
+    "code": "background: linear-gradient(90deg, yellow, red);",
+    "options": [
+      "background: gradient-line(to right, yellow, red);",
+      "background: linear-gradient(90deg, yellow, red);",
+      "background-color: linear(90, yellow, red);",
+      "background-image: color-transition(horizontal, yellow, red);"
+    ],
+    "answer": 1,
+    "explanation": "Funcția corectă este linear-gradient(direcție_sau_unghi, culoare1, culoare2, ...). 90deg sau 'to right' generează o tranziție pe orizontală de la stânga la dreapta."
+  }
+];
+
+    }
+  </script>
+
+  <!-- APP ENGINE LOGIC -->
+  <script>
+    /* ============================================================
+       APPLICATION LOGIC & AUDIO SYNTHESIS
+       ============================================================ */
+    class QuizApp {
+      constructor() {
+        this.questions = typeof QUIZ_QUESTIONS !== 'undefined' ? QUIZ_QUESTIONS : [];
+        this.currentSession = [];
+        this.currentIndex = 0;
+        this.userAnswers = {}; // { questionId: selectedOptionIndex }
+        this.timer = null;
+        this.timeSeconds = 0;
+        this.soundEnabled = true;
+        this.theme = 'dark';
+
+        this.config = {
+          mode: 'practice', // 'practice' or 'exam'
+          course: 'ALL',
+          difficulty: 'ALL',
+          count: 20
+        };
+
+        this.studyFilter = {
+          course: 'ALL',
+          keyword: ''
+        };
+
+        this.audioCtx = null;
+        this.init();
+      }
+
+      init() {
+        // Theme initialization
+        const savedTheme = localStorage.getItem('tw_quiz_theme') || 'dark';
+        this.setTheme(savedTheme);
+
+        // Sound preference
+        const savedSound = localStorage.getItem('tw_quiz_sound');
+        if (savedSound !== null) {
+          this.soundEnabled = savedSound === 'true';
+          this.updateSoundIcon();
+        }
+
+        // Set counts on home
+        const allCountElem = document.getElementById('count-all');
+        if (allCountElem) allCountElem.textContent = this.questions.length;
+
+        // Keyboard navigation
+        window.addEventListener('keydown', (e) => this.handleKeyboard(e));
+
+        this.renderStudyCards();
+      }
+
+      // ------------------------------------------------------------
+      // AUDIO SYNTHESIS (Web Audio API - No external mp3 files needed)
+      // ------------------------------------------------------------
+      getAudioContext() {
+        if (!this.audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.audioCtx = new AudioContext();
+        }
+        if (this.audioCtx && this.audioCtx.state === 'suspended') {
+          this.audioCtx.resume();
+        }
+        return this.audioCtx;
+      }
+
+      playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1) {
+        if (!this.soundEnabled) return;
+        try {
+          const ctx = this.getAudioContext();
+          if (!ctx) return;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+          gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start();
+          osc.stop(ctx.currentTime + duration);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      playCorrectSound() {
+        if (!this.soundEnabled) return;
+        this.playTone(523.25, 'triangle', 0.1, 0.15); // C5
+        setTimeout(() => this.playTone(659.25, 'triangle', 0.1, 0.15), 100); // E5
+        setTimeout(() => this.playTone(783.99, 'triangle', 0.25, 0.18), 200); // G5
+      }
+
+      playWrongSound() {
+        if (!this.soundEnabled) return;
+        this.playTone(280, 'sawtooth', 0.18, 0.12);
+        setTimeout(() => this.playTone(210, 'sawtooth', 0.28, 0.15), 120);
+      }
+
+      playFinishFanfare() {
+        if (!this.soundEnabled) return;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          setTimeout(() => this.playTone(freq, 'triangle', 0.25, 0.2), i * 140);
+        });
+      }
+
+      toggleSound() {
+        this.soundEnabled = !this.soundEnabled;
+        localStorage.setItem('tw_quiz_sound', this.soundEnabled);
+        this.updateSoundIcon();
+      }
+
+      updateSoundIcon() {
+        const btn = document.getElementById('soundBtn');
+        if (!btn) return;
+        btn.innerHTML = this.soundEnabled
+          ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`
+          : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`;
+      }
+
+      // ------------------------------------------------------------
+      // THEME TOGGLE
+      // ------------------------------------------------------------
+      setTheme(theme) {
+        this.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('tw_quiz_theme', theme);
+      }
+
+      toggleTheme() {
+        this.setTheme(this.theme === 'dark' ? 'light' : 'dark');
+      }
+
+      // ------------------------------------------------------------
+      // SCREEN NAVIGATION
+      // ------------------------------------------------------------
+      showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById(`screen-${screenId}`);
+        if (target) {
+          target.classList.add('active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      // ------------------------------------------------------------
+      // CONFIGURATION & SETUP
+      // ------------------------------------------------------------
+      setMode(mode, elem) {
+        this.config.mode = mode;
+        document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+        if (elem) elem.classList.add('selected');
+      }
+
+      setFilter(key, val, elem) {
+        this.config[key] = val;
+        const container = elem.parentElement;
+        if (container) {
+          container.querySelectorAll('.choice-pill').forEach(p => p.classList.remove('selected'));
+          elem.classList.add('selected');
+        }
+      }
+
+      startQuiz(customQuestions = null) {
+        if (customQuestions) {
+          this.currentSession = [...customQuestions];
+        } else {
+          let pool = [...this.questions];
+
+          // Course filter
+          if (this.config.course !== 'ALL') {
+            pool = pool.filter(q => q.course === this.config.course);
+          }
+
+          // Difficulty filter
+          if (this.config.difficulty !== 'ALL') {
+            pool = pool.filter(q => q.difficulty === this.config.difficulty);
+          }
+
+          // Shuffle
+          pool = this.shuffleArray(pool);
+
+          // Count
+          const maxCount = this.config.count === 'MAX' ? pool.length : parseInt(this.config.count, 10);
+          this.currentSession = pool.slice(0, Math.min(pool.length, maxCount));
+        }
+
+        if (this.currentSession.length === 0) {
+          alert('Nu a fost găsită nicio întrebare pentru filtrele selectate. Te rugăm să ajustezi filtrele!');
+          return;
+        }
+
+        this.currentIndex = 0;
+        this.userAnswers = {};
+        this.timeSeconds = 0;
+        this.startTimer();
+
+        this.showScreen('quiz');
+        this.renderCurrentQuestion();
+      }
+
+      shuffleArray(arr) {
+        const res = [...arr];
+        for (let i = res.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [res[i], res[j]] = [res[j], res[i]];
+        }
+        return res;
+      }
+
+      // ------------------------------------------------------------
+      // TIMER
+      // ------------------------------------------------------------
+      startTimer() {
+        if (this.timer) clearInterval(this.timer);
+        this.timer = setInterval(() => {
+          this.timeSeconds++;
+          const mins = String(Math.floor(this.timeSeconds / 60)).padStart(2, '0');
+          const secs = String(this.timeSeconds % 60).padStart(2, '0');
+          const timerElem = document.getElementById('timerText');
+          if (timerElem) timerElem.textContent = `${mins}:${secs}`;
+        }, 1000);
+      }
+
+      stopTimer() {
+        if (this.timer) {
+          clearInterval(this.timer);
+          this.timer = null;
+        }
+      }
+
+      // ------------------------------------------------------------
+      // QUESTION RENDERING & INTERACTION
+      // ------------------------------------------------------------
+      renderCurrentQuestion() {
+        const q = this.currentSession[this.currentIndex];
+        if (!q) return;
+
+        // Progress bar & counters
+        const progress = ((this.currentIndex + 1) / this.currentSession.length) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+        document.getElementById('qCounterText').textContent = `Întrebarea ${this.currentIndex + 1} din ${this.currentSession.length}`;
+
+        // Badges
+        document.getElementById('qBadgeCourse').textContent = q.course;
+        document.getElementById('qBadgeCat').textContent = q.category;
+
+        const diffBadge = document.getElementById('qBadgeDiff');
+        diffBadge.textContent = q.difficulty;
+        diffBadge.className = 'badge ' + (
+          q.difficulty === 'Ușor' ? 'badge-diff-easy' :
+          q.difficulty === 'Mediu' ? 'badge-diff-medium' : 'badge-diff-hard'
+        );
+
+        // Prompt
+        document.getElementById('qPromptText').textContent = q.question;
+
+        // Code block
+        const codeBlock = document.getElementById('qCodeBlock');
+        if (q.code) {
+          codeBlock.textContent = q.code;
+          codeBlock.style.display = 'block';
+        } else {
+          codeBlock.style.display = 'none';
+        }
+
+        // Options
+        const container = document.getElementById('qOptionsContainer');
+        container.innerHTML = '';
+
+        const letters = ['A', 'B', 'C', 'D'];
+        const selectedIdx = this.userAnswers[q.id];
+        const isAnswered = selectedIdx !== undefined;
+
+        q.options.forEach((optText, idx) => {
+          const item = document.createElement('div');
+          item.className = 'option-item';
+          item.setAttribute('data-idx', idx);
+
+          if (this.config.mode === 'practice' && isAnswered) {
+            item.classList.add('disabled');
+            if (idx === q.answer) {
+              item.classList.add('correct');
+            } else if (idx === selectedIdx) {
+              item.classList.add('incorrect');
+            }
+          } else {
+            if (idx === selectedIdx) item.classList.add('selected');
+          }
+
+          item.innerHTML = `
+            <div class="option-letter">${letters[idx]}</div>
+            <div class="option-text">${this.escapeHTML(optText)}</div>
+            <div class="option-status-icon">${idx === q.answer ? '✓' : '✗'}</div>
+          `;
+
+          item.onclick = () => this.handleOptionClick(idx);
+          container.appendChild(item);
+        });
+
+        // Explanation Card
+        const explCard = document.getElementById('qExplanationCard');
+        if (this.config.mode === 'practice' && isAnswered) {
+          document.getElementById('qExplanationText').textContent = q.explanation;
+          explCard.style.display = 'block';
+        } else {
+          explCard.style.display = 'none';
+        }
+
+        // Navigation buttons
+        const prevBtn = document.getElementById('prevBtn');
+        prevBtn.style.visibility = this.currentIndex > 0 ? 'visible' : 'hidden';
+
+        const nextBtn = document.getElementById('nextBtn');
+        if (this.currentIndex === this.currentSession.length - 1) {
+          nextBtn.innerHTML = `Finalizează Testul <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        } else {
+          nextBtn.innerHTML = `Următoarea <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+        }
+      }
+
+      handleOptionClick(idx) {
+        const q = this.currentSession[this.currentIndex];
+        if (!q) return;
+
+        // If already answered in practice mode, ignore
+        if (this.config.mode === 'practice' && this.userAnswers[q.id] !== undefined) {
+          return;
+        }
+
+        this.userAnswers[q.id] = idx;
+
+        if (this.config.mode === 'practice') {
+          if (idx === q.answer) {
+            this.playCorrectSound();
+          } else {
+            this.playWrongSound();
+          }
+        } else {
+          // Exam mode: soft tick
+          this.playTone(440, 'sine', 0.05, 0.05);
+        }
+
+        this.renderCurrentQuestion();
+      }
+
+      nextQuestion() {
+        if (this.currentIndex < this.currentSession.length - 1) {
+          this.currentIndex++;
+          this.renderCurrentQuestion();
+        } else {
+          this.finishQuiz();
+        }
+      }
+
+      prevQuestion() {
+        if (this.currentIndex > 0) {
+          this.currentIndex--;
+          this.renderCurrentQuestion();
+        }
+      }
+
+      handleKeyboard(e) {
+        const quizScreen = document.getElementById('screen-quiz');
+        if (!quizScreen || !quizScreen.classList.contains('active')) return;
+
+        const key = e.key.toUpperCase();
+        if (['1', 'A'].includes(key)) this.handleOptionClick(0);
+        else if (['2', 'B'].includes(key)) this.handleOptionClick(1);
+        else if (['3', 'C'].includes(key)) this.handleOptionClick(2);
+        else if (['4', 'D'].includes(key)) this.handleOptionClick(3);
+        else if (key === 'ENTER' || key === 'ARROW_RIGHT' || e.code === 'Space') {
+          // In exam mode or answered in practice, advance
+          const q = this.currentSession[this.currentIndex];
+          if (this.userAnswers[q.id] !== undefined || this.config.mode === 'exam') {
+            e.preventDefault();
+            this.nextQuestion();
+          }
+        } else if (key === 'ARROW_LEFT') {
+          this.prevQuestion();
+        }
+      }
+
+      // ------------------------------------------------------------
+      // FINISH & RESULTS
+      // ------------------------------------------------------------
+      finishQuiz() {
+        this.stopTimer();
+        this.playFinishFanfare();
+
+        let correctCount = 0;
+        const total = this.currentSession.length;
+        const courseStats = {};
+
+        this.currentSession.forEach(q => {
+          const isCorrect = this.userAnswers[q.id] === q.answer;
+          if (isCorrect) correctCount++;
+
+          if (!courseStats[q.course]) {
+            courseStats[q.course] = { correct: 0, total: 0 };
+          }
+          courseStats[q.course].total++;
+          if (isCorrect) courseStats[q.course].correct++;
+        });
+
+        const wrongCount = total - correctCount;
+        const pct = Math.round((correctCount / total) * 100);
+        const grade = (1 + (pct / 100) * 9).toFixed(2); // Academic grade 1 - 10
+
+        // Populate results hero
+        document.getElementById('resScoreVal').textContent = correctCount;
+        document.getElementById('resScoreTotal').textContent = `din ${total}`;
+        document.getElementById('resGradeBadge').textContent = `Nota: ${grade} / 10`;
+        document.getElementById('resAccuracy').textContent = `${pct}%`;
+        document.getElementById('resCorrectCount').textContent = correctCount;
+        document.getElementById('resWrongCount').textContent = wrongCount;
+
+        const mins = String(Math.floor(this.timeSeconds / 60)).padStart(2, '0');
+        const secs = String(this.timeSeconds % 60).padStart(2, '0');
+        document.getElementById('resTotalTime').textContent = `${mins}:${secs}`;
+
+        // Feedback message
+        const feedbackElem = document.getElementById('resFeedbackText');
+        if (pct >= 90) {
+          feedbackElem.textContent = '🌟 Excelent! Felicitări, stăpânești perfect materia de CSS, selectori, cascadă și principii de UI Design!';
+        } else if (pct >= 75) {
+          feedbackElem.textContent = '👏 Foarte bine! Ai o înțelegere solidă a conceptelor. Revizuiește detaliile legate de întrebările greșite!';
+        } else if (pct >= 50) {
+          feedbackElem.textContent = '👍 Bun efort! Ai trecut testul, însă este recomandat să revezi regulile de specificitate, Flexbox și Grid.';
+        } else {
+          feedbackElem.textContent = '📚 Necesită aprofundare! Consultă modul de Studiu pentru a parcurge explicațiile fiecărei întrebări.';
+        }
+
+        // Retry wrong button
+        const retryBtn = document.getElementById('retryWrongBtn');
+        retryBtn.style.display = wrongCount > 0 ? 'inline-flex' : 'none';
+
+        // Course Breakdown
+        const breakdownContainer = document.getElementById('courseBreakdownList');
+        breakdownContainer.innerHTML = '';
+        Object.keys(courseStats).sort().forEach(cName => {
+          const stat = courseStats[cName];
+          const cPct = Math.round((stat.correct / stat.total) * 100);
+          const row = document.createElement('div');
+          row.className = 'breakdown-row';
+          row.innerHTML = `
+            <div class="breakdown-label-row">
+              <span>${cName}</span>
+              <span>${stat.correct}/${stat.total} (${cPct}%)</span>
+            </div>
+            <div class="breakdown-bar-bg">
+              <div class="breakdown-bar-fill" style="width: ${cPct}%;"></div>
+            </div>
+          `;
+          breakdownContainer.appendChild(row);
+        });
+
+        // Review list
+        this.renderReviewList('all');
+        this.showScreen('results');
+      }
+
+      renderReviewList(filterType = 'all') {
+        const container = document.getElementById('reviewQuestionsList');
+        container.innerHTML = '';
+
+        let correctTotal = 0;
+        let wrongTotal = 0;
+
+        this.currentSession.forEach(q => {
+          if (this.userAnswers[q.id] === q.answer) correctTotal++;
+          else wrongTotal++;
+        });
+
+        document.getElementById('revCountAll').textContent = this.currentSession.length;
+        document.getElementById('revCountWrong').textContent = wrongTotal;
+        document.getElementById('revCountCorrect').textContent = correctTotal;
+
+        const letters = ['A', 'B', 'C', 'D'];
+
+        this.currentSession.forEach((q, idx) => {
+          const userAns = this.userAnswers[q.id];
+          const isCorrect = userAns === q.answer;
+
+          if (filterType === 'wrong' && isCorrect) return;
+          if (filterType === 'correct' && !isCorrect) return;
+
+          const item = document.createElement('div');
+          item.className = `review-item ${isCorrect ? 'is-correct' : 'is-wrong'}`;
+
+          const userAnsText = userAns !== undefined ? `${letters[userAns]}. ${q.options[userAns]}` : 'Niciun răspuns';
+          const correctAnsText = `${letters[q.answer]}. ${q.options[q.answer]}`;
+
+          item.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div style="display: flex; gap: 0.5rem;">
+                <span class="badge badge-course">${q.course}</span>
+                <span class="badge badge-cat">${q.category}</span>
+              </div>
+              <span class="badge ${isCorrect ? 'badge-diff-easy' : 'badge-diff-hard'}">
+                ${isCorrect ? '✓ Corect' : '✗ Greșit'}
+              </span>
+            </div>
+
+            <div style="font-weight: 700; margin-bottom: 0.75rem; font-size: 1.05rem;">
+              ${idx + 1}. ${this.escapeHTML(q.question)}
+            </div>
+
+            ${q.code ? `<div class="code-block" style="margin-bottom: 0.75rem;">${this.escapeHTML(q.code)}</div>` : ''}
+
+            <div style="font-size: 0.9rem; margin-bottom: 0.4rem;">
+              <strong>Răspunsul tău:</strong>
+              <span style="color: ${isCorrect ? 'var(--color-success)' : 'var(--color-danger)'};">
+                ${this.escapeHTML(userAnsText)}
+              </span>
+            </div>
+
+            ${!isCorrect ? `
+              <div style="font-size: 0.9rem; margin-bottom: 0.75rem;">
+                <strong>Răspuns corect:</strong>
+                <span style="color: var(--color-success); font-weight: 600;">
+                  ${this.escapeHTML(correctAnsText)}
+                </span>
+              </div>
+            ` : ''}
+
+            <div class="explanation-card" style="display: block; margin-top: 0.75rem;">
+              <div class="explanation-header">💡 Explicație Curs:</div>
+              <div class="explanation-text">${this.escapeHTML(q.explanation)}</div>
+            </div>
+          `;
+
+          container.appendChild(item);
+        });
+      }
+
+      filterReview(type, elem) {
+        document.querySelectorAll('.review-filter-row .btn').forEach(b => b.classList.remove('btn-primary'));
+        if (elem) elem.classList.add('btn-primary');
+        this.renderReviewList(type);
+      }
+
+      retryMistakes() {
+        const mistakes = this.currentSession.filter(q => this.userAnswers[q.id] !== q.answer);
+        if (mistakes.length === 0) {
+          alert('Nu ai nicio întrebare greșită de reluat!');
+          return;
+        }
+        this.startQuiz(mistakes);
+      }
+
+      restartQuiz() {
+        this.showScreen('home');
+      }
+
+      confirmExit() {
+        document.getElementById('exitModal').classList.add('active');
+      }
+
+      closeModal() {
+        document.getElementById('exitModal').classList.remove('active');
+      }
+
+      abortToHome() {
+        this.closeModal();
+        this.stopTimer();
+        this.showScreen('home');
+      }
+
+      // ------------------------------------------------------------
+      // STUDY BROWSER / FLASHCARDS
+      // ------------------------------------------------------------
+      openStudyBrowser() {
+        this.showScreen('study');
+        this.renderStudyCards();
+      }
+
+      setStudyCourseFilter(cName, elem) {
+        this.studyFilter.course = cName;
+        const container = elem.parentElement;
+        if (container) {
+          container.querySelectorAll('.choice-pill').forEach(p => p.classList.remove('selected'));
+          elem.classList.add('selected');
+        }
+        this.renderStudyCards();
+      }
+
+      renderStudyCards() {
+        const container = document.getElementById('studyCardsContainer');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const keyword = (document.getElementById('studySearchInput')?.value || '').toLowerCase().trim();
+        const course = this.studyFilter.course;
+
+        let filtered = this.questions.filter(q => {
+          if (course !== 'ALL' && q.course !== course) return false;
+          if (keyword) {
+            const matchPrompt = q.question.toLowerCase().includes(keyword);
+            const matchExpl = q.explanation.toLowerCase().includes(keyword);
+            const matchCat = q.category.toLowerCase().includes(keyword);
+            const matchCode = (q.code || '').toLowerCase().includes(keyword);
+            if (!matchPrompt && !matchExpl && !matchCat && !matchCode) return false;
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 3rem;">Nu s-a găsit nicio întrebare pentru criteriile căutate.</div>`;
+          return;
+        }
+
+        const letters = ['A', 'B', 'C', 'D'];
+
+        filtered.forEach((q, i) => {
+          const card = document.createElement('div');
+          card.className = 'card-accordion';
+          card.innerHTML = `
+            <div class="accordion-header" onclick="this.parentElement.classList.toggle('open')">
+              <div>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.35rem;">
+                  <span class="badge badge-course">${q.course}</span>
+                  <span class="badge badge-cat">${q.category}</span>
+                  <span class="badge ${q.difficulty === 'Ușor' ? 'badge-diff-easy' : q.difficulty === 'Mediu' ? 'badge-diff-medium' : 'badge-diff-hard'}">${q.difficulty}</span>
+                </div>
+                <div class="accordion-title">${i + 1}. ${this.escapeHTML(q.question)}</div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="accordion-body">
+              ${q.code ? `<div class="code-block">${this.escapeHTML(q.code)}</div>` : ''}
+
+              <div style="margin-bottom: 1rem;">
+                <strong style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">Variante de răspuns:</strong>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem;">
+                  ${q.options.map((opt, idx) => `
+                    <div style="padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.92rem; ${idx === q.answer ? 'background: var(--color-success-bg); border: 1px solid var(--color-success-border); font-weight: 600;' : 'background: var(--bg-surface-elevated);'}">
+                      ${letters[idx]}. ${this.escapeHTML(opt)} ${idx === q.answer ? ' (Răspuns Corect ✓)' : ''}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="explanation-card" style="display: block;">
+                <div class="explanation-header">💡 Explicație detaliată din curs:</div>
+                <div class="explanation-text">${this.escapeHTML(q.explanation)}</div>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/&/g, '&amp;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;')
+                  .replace(/"/g, '&quot;')
+                  .replace(/'/g, '&#039;');
+      }
+    }
+
+    // Initialize application instance
+    const app = new QuizApp();
+  </script>
+</body>
+</html>
